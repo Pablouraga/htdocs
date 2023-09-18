@@ -140,4 +140,5 @@ $generateSections = 5;
         Billetes de 5 <?=$billetes5?><br>
         Monedas de 2 <?=$monedas2?><br>
         Monedas de 1 <?=$monedas1?>
-    </div>
+    </div> 
+    
