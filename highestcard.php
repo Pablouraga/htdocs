@@ -13,13 +13,19 @@
     <h1>Juego de Carta Mas Alta</h1>
     <header>
         <?php
+        /**
+         * @author Pablo Uraga Martinez
+         * @version = 1.0.0
+         * 
+         * Juego entre dos jugadores a ver quien saca las cartas mas altas
+         */
         require_once(__DIR__ . '/include/nav.inc.php');
         ?>
     </header>
     <main>
         <?php
         // Baraja de cartas francesa
-        require_once(__DIR__ .'/include/deck.inc.php');
+        require_once(__DIR__ . '/include/deck.inc.php');
 
         // Ordenamos aleatoriamente el array de cartas
         shuffle($deck);
@@ -82,7 +88,7 @@
         for ($i = 0; $i < count($player1); $i++) {
             $player1card = $player1[$i]["value"];
             $player2card = $player2[$i]["value"];
-        
+
             // Asignar valores numéricos a las cartas
             $cardValues = [
                 "A" => 1,
@@ -99,10 +105,10 @@
                 "3" => 3,
                 "2" => 2,
             ];
-        
+
             $player1value = $cardValues[$player1card];
             $player2value = $cardValues[$player2card];
-        
+
             if ($player1value > $player2value) {
                 $player1points += 2;
                 $player1[$i]["highlight"] = true; // Marcar la carta del jugador 1
@@ -137,9 +143,9 @@
         echo '<br>Jugador 2: ' . $player2points;
 
         if ($player1points > $player2points) {
-            echo '<h2>El jugador ganador ha sido '. $nombrejugador .'</h2>';
+            echo '<h2>El jugador ganador ha sido ' . $nombrejugador . '</h2>';
         } else if ($player2points > $player1points) {
-            echo '<h2>El jugador ganador ha sido '. $nombrejugador2 .'</h2>';
+            echo '<h2>El jugador ganador ha sido ' . $nombrejugador2 . '</h2>';
         } else {
             echo '<h2>Empate</h2>';
         }

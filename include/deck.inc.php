@@ -1,5 +1,4 @@
 <?php
-
 $deck = [
     ["suit" => "corazones", "value" => "A", "image" => "cor_1.png"],
     ["suit" => "corazones", "value" => "2", "image" => "cor_2.png"],
