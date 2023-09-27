@@ -5,7 +5,11 @@ Pablo Uraga Martinez
 Last Update: Sep 15th, 2023
 
 ### Todo list
-- [ ] Task title ~3d #type @name yyyy-mm-dd  
+- [ ] Card game
 
 ### Completed ✓
-- [x] Completed task title  
+- [x] Portfolio
+- [x] Generating
+- [x] Table
+- [x] Sorting
+- [x] Functions
