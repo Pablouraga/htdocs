@@ -19,6 +19,7 @@
      */
     require_once(__DIR__ . '/include/nav.inc.php');
     require_once(__DIR__ . '/include/deck.inc.php');
+    require_once(__DIR__ . '/include/valuesblackjack.inc.php');
 
     // Ordenamos aleatoriamente el array de cartas
     shuffle($deck);
