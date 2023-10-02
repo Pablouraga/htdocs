@@ -38,11 +38,11 @@
     // echo '<pre>';
     // print_r($players);
     // echo '</pre>';
-    
+
     // Funcion que saque una carta al jugador (foreach)
     // Devuelve un array con el campo 'cardvalue' que contiene el valor de la carta (1,2,Q,A)
     // y 'cardimg' que contiene el enlace a la imagen (tre_3.png)
-    
+
     $cardValues = [
         "A" => 1,
         "K" => 10,
@@ -61,14 +61,14 @@
 
     foreach ($players as $key => $player) {
         do {
-            list($cardvalue, $cardimg, $deck) = drawCard($player["id"], $deck, $players);
+            list($cardvalue, $cardimg, $deck, $players[$key]["amountOfCards"]) = drawCard($player["id"], $deck, $players);
 
             // Guardamos el valor y la imagen de la carta en un subarray de "hand"
             $players[$key]["hand"][] = ["value" => $cardvalue, "image" => $cardimg];
 
             // Calculamos puntos
             $players[$key]["score"] = calcScore($players[$key]["hand"]);
-        } while ($players[$key]["score"] < 14 && $players[$key]["amountOfCards"] < 2);
+        } while ($players[$key]["score"] < 14 || $players[$key]["amountOfCards"] < 2);
     }
 
     echo '<div id="containerplayers">';
@@ -80,10 +80,10 @@
         // Mostrar las imágenes de las cartas en la mano del jugador
         foreach ($players[$key]["hand"] as $card) {
             // echo '<img src="' . $card["image"] . '" height="200px">';
-    
+
             // echo $card["value"]. ' ';
             // echo $card["image"]. '<br>';
-    
+
             echo '<img src="/img/' . $card["image"] . '" height=110px>';
         }
 

@@ -13,7 +13,7 @@ function drawCard($player, $deck, $players): array
         $players[$player]["amountOfCards"]++;
     }
 
-    return [$cardvalue, $cardimg, $deck];
+    return [$cardvalue, $cardimg, $deck, $players[$player]["amountOfCards"]];
 }
 
 function calcScore($hand)
