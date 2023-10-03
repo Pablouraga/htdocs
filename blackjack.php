@@ -9,7 +9,6 @@
 </head>
 
 <body>
-    <h1>Blackjack</h1>
     <?php
     /**
      * @author Pablo Uraga Martinez
@@ -21,6 +20,7 @@
     require_once(__DIR__ . '/include/deck.inc.php');
     require_once(__DIR__ . '/include/valuesblackjack.inc.php');
     require_once(__DIR__ . '/include/functions.inc.php');
+    echo '<h1>Blackjack</h1>';
 
     // Ordenamos aleatoriamente el array de cartas
     shuffle($deck);
@@ -42,22 +42,6 @@
     // Funcion que saque una carta al jugador (foreach)
     // Devuelve un array con el campo 'cardvalue' que contiene el valor de la carta (1,2,Q,A)
     // y 'cardimg' que contiene el enlace a la imagen (tre_3.png)
-
-    $cardValues = [
-        "A" => 1,
-        "K" => 10,
-        "Q" => 10,
-        "J" => 10,
-        "10" => 10,
-        "9" => 9,
-        "8" => 8,
-        "7" => 7,
-        "6" => 6,
-        "5" => 5,
-        "4" => 4,
-        "3" => 3,
-        "2" => 2,
-    ];
 
     foreach ($players as $key => $player) {
         do {

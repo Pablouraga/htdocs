@@ -10,7 +10,7 @@
 
 <body>
 
-    <h1>Juego de Carta Mas Alta</h1>
+
     <header>
         <?php
         /**
@@ -21,6 +21,7 @@
          */
         require_once(__DIR__ . '/include/nav.inc.php');
         ?>
+        <h1>Juego de Carta Mas Alta</h1>
     </header>
     <main>
         <?php
@@ -51,7 +52,6 @@
         $idjugador = $players[$generatedplayer];
         $nombrejugador = $idjugador["nombre"];
 
-        echo $nombrejugador . "\n<br>";
 
 
         // Seleccionar otro jugador aleatorio
@@ -63,7 +63,6 @@
             $nombrejugador2 = $idjugador2["nombre"];
         } while ($idjugador === $idjugador2);
 
-        echo $nombrejugador2 . "\n<br><br>";
 
         for ($i = 0; $i < 20; $i++) {
             $generatedcard = array_pop($deck);
@@ -122,7 +121,7 @@
         }
 
         // Mostramos las cartas de cada jugador
-        echo '<h3>Jugador 1</h3>';
+        echo '<h3>' . $nombrejugador . ' ' . $player1points . ' puntos</h3>';
         foreach ($player1 as $card) {
             $highlightClass = isset($card["highlight"]) && $card["highlight"] ? 'highlight' : '';
             echo '<img src="/img/' . $card["image"] . '" alt="Carta" height="200px" class="carta ' . $highlightClass . '">';
@@ -130,17 +129,12 @@
 
         echo '<br>';
 
-        echo '<h3>Jugador 2</h3>';
+        echo '<h3>' . $nombrejugador2 . ' ' . $player2points . ' puntos</h3>';
 
         foreach ($player2 as $card) {
             $highlightClass = isset($card["highlight"]) && $card["highlight"] ? 'highlight' : '';
             echo '<img src="/img/' . $card["image"] . '" alt="Carta" height="200px" class="carta ' . $highlightClass . '">';
         }
-
-        echo '<br>';
-
-        echo '<br>Jugador 1: ' . $player1points;
-        echo '<br>Jugador 2: ' . $player2points;
 
         if ($player1points > $player2points) {
             echo '<h2>El jugador ganador ha sido ' . $nombrejugador . '</h2>';
