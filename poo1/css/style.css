@@ -1,11 +1,12 @@
 article{
-    border: 3px dashed black;
+    border: 5px double black;
     width: auto;
     margin-bottom: 10px;
     border-radius: 5px;
+    width: fit-content;
 }
 h1{
-    background: orange;
+    background: lightblue;
     padding: 5px;
     margin-top: 0px;
     margin-bottom: 0px;
