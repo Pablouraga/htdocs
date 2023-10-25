@@ -43,5 +43,3 @@ function calcScore($hand)
 
     return $score;
 }
-
-?>
