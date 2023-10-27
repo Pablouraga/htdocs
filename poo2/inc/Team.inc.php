@@ -4,8 +4,8 @@ class Team
 {
     private $name;
     private $country;
-    private $riders;
-    private $mechanics;
+    private $riders = [];
+    private $mechanics = [];
 
     public function __construct(string $name, string $country)
     {
@@ -25,6 +25,17 @@ class Team
 
     public function __toString()
     {
-        
+        $teaminfo = "<strong>Team</strong>: " . $this->name . ", country: " . $this->country . "";
+        foreach ($this->riders as $rider) {
+            $teaminfo .= "\n" . $rider;
+        }
+
+        foreach ($this->mechanics as $mechanic) {
+            $teaminfo .= "\n" . $mechanic;
+        }
+
+        $teaminfo .= '<br><br>';
+
+        return $teaminfo;
     }
 }

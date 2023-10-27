@@ -1,6 +1,6 @@
 <?php
-require_once(__DIR__. '/poo2/inc/Team.inc.php');
-require_once(__DIR__. '/poo2/inc/Circuit.inc.php');
+require_once('Team.inc.php');
+require_once('Circuit.inc.php');
 
 $teams[] = new Team('Honda HRC', 'Japón');
 $teams[] = new Team('Yamaha', 'Japón');

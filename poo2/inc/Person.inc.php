@@ -12,6 +12,7 @@ class Person
     }
 
     public function __toString() {
-        return 'Name: ' . $this->name . ' Birthday: ' . $this->birthday .'';
+
+        return '<br>Name: ' . $this->name . ' Birthday: ' . date('j F Y', $this->birthday) .'';
     }
 }
