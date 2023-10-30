@@ -8,8 +8,8 @@ class Grandprix
 
     public function __construct(Circuit $circuit, int $date)
     {
-        $this->date = $date;
         $this->circuit = $circuit;
+        $this->date = $date;
     }
     
 

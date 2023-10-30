@@ -14,6 +14,7 @@
     require_once(__DIR__ . '/inc/Person.inc.php');
     require_once(__DIR__ . '/inc/Mechanic.inc.php');
     require_once(__DIR__ . '/inc/Rider.inc.php');
+    require_once(__DIR__ . '/inc/GrandPrix.inc.php');
 
     $team1 = $teams[0];
     $rider11 = new Rider(randomName(), randomBirthday(), randomDorsal($dorsals));
@@ -59,14 +60,14 @@
     $team4->addMechanic($mechanic14);
     $team4->addMechanic($mechanic24);
 
-    // $gp1 = $gps[0];
-    // $gp1 = new GrandPrix();
+    $circ1 = $circuits[0];
+    $gp1 = new GrandPrix($circ1, randomBirthday());
 
 
 
     ?>
 
-    <h1>Equipos:</h1>
+    <h1>Equipos</h1>
     <ul>
         <?php
         foreach ($teams as $team) {
@@ -75,7 +76,7 @@
         ?>
     </ul>
 
-    <h1>Resultados de Carreras:</h1>
+    <h1>Carreras</h1>
     <ol>
         <?php
         foreach ($GrandPrix as $gp) {
