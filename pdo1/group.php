@@ -7,17 +7,16 @@ $dbpassword = '15151';
 $dboptions = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
 
 $connection = connect($dbname, $dbuser, $dbpassword, $dboptions);
-$result = $connection->prepare("SELECT * from grupos WHERE nombre=?");
-$result = $connection->prepare("SELECT * from grupos LEFT JOIN albumes WHERE nombre=?");
-$result->bindParam(1, $_GET['nombre_grupo']);
+$result = $connection->prepare("SELECT * from grupos g, albumes a WHERE g.codigo = a.grupo");
+// $result->bindParam(1, $_GET['nombre_grupo']);
 $result->execute();
-// echo $_GET['nombre_grupo'];
-echo '<table>';
-while ($group = $result->fetch(PDO::FETCH_ASSOC)) {
-    echo 'Codigo: ' . $group['codigo'];
-    echo '<br>Nombre: ' . $group['nombre'];
-    echo '<br>Genero: ' . $group['genero'];
-    echo '<br>Pais: ' . $group['pais'];
-    echo '<br>Inicio: ' . $group['inicio'];
-}
-echo '</table>';
+
+// while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+//     echo "Grupo: " . $row['nombre'] . "<br>";
+//     echo "Título: " . $row['titulo'] . "<br>";
+//     echo "<br>"; 
+// }
+
+echo '<pre>';
+print_r($result->fetchAll(PDO::FETCH_ASSOC));
+echo '</pre>';
