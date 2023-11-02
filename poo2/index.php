@@ -60,10 +60,11 @@
     $team4->addMechanic($mechanic14);
     $team4->addMechanic($mechanic24);
 
-    $circ1 = $circuits[0];
-    $gp1 = new GrandPrix($circ1, randomBirthday());
+    $gp1 = new GrandPrix($circuits[0], randomBirthday());
+    $gp2 = new Grandprix($circuits[1], randomBirthday());
+    $gp3 = new Grandprix($circuits[2], randomBirthday());
 
-
+    $gps = [$gp1, $gp2, $gp3];
 
     ?>
 
@@ -79,9 +80,12 @@
     <h1>Carreras</h1>
     <ol>
         <?php
-        foreach ($GrandPrix as $gp) {
-            echo $gp->results();
+        foreach ($gps as $grandprix) {
+            echo $grandprix . '<br>';
+            echo $grandprix->results();
         }
+
+        
         ?>
     </ol>
 </body>

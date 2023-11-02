@@ -4,8 +4,8 @@ class Team
 {
     private $name;
     private $country;
-    private $riders = [];
-    private $mechanics = [];
+    private $riders;
+    private $mechanics;
 
     public function __construct(string $name, string $country)
     {
@@ -15,11 +15,13 @@ class Team
 
     public function addRider(Rider $r)
     {
+        $riders[] = $this->riders;
         $this->riders[] = $r;
     }
 
     public function addMechanic(Mechanic $m)
     {
+        $mechanics[] = $this->mechanics;
         $this->mechanics[] = $m;
     }
 

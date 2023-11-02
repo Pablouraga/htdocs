@@ -3,7 +3,7 @@
 class Grandprix
 {
     private $date;
-    private $ridersInRace;
+    private $ridersInRace = [];
     private $circuit;
 
     public function __construct(Circuit $circuit, int $date)
@@ -11,11 +11,18 @@ class Grandprix
         $this->circuit = $circuit;
         $this->date = $date;
     }
-    
 
-    public function addRider(Rider $r)
+
+    public function addRider(Rider $r, $pos)
     {
         $this->ridersInRace[] = $r;
+
+        if (!isset($this->ridersInRace[$pos])) {
+            $this->ridersInRace[$pos] = $r;
+            echo $pos;
+        } else {
+            echo 'Posicion ' . $pos . ' ocupada';
+        }
     }
 
     public function results()
@@ -23,14 +30,13 @@ class Grandprix
         ksort($this->ridersInRace);
         $results = 'Results: ';
         foreach ($this->ridersInRace as $pos => $rider) {
-            $results .= '\nPosicion: ' . $pos . ' ' . $rider->__toString . '';
+            $results .= "\nPosicion: $pos " . $rider->__toString();
         }
         return $results;
     }
 
     public function __toString()
     {
-        $circuitInfo = $this->circuit;
-        return $circuitInfo . ' date: ' . $this->date . '';
+        return $this->circuit->__toString() . ' date: ' . $this->date . '';
     }
 }
