@@ -20,11 +20,11 @@
 
     $connection = connect($dbname, $dbuser, $dbpassword, $dboptions);
 
-    $getgrupos = $connection->query("SELECT nombre from grupos");
+    $getgrupos = $connection->query("SELECT nombre, codigo from grupos");
 
     while ($grupo = $getgrupos->fetch()) {
         $nombre = $grupo['nombre'];
-        echo '<a href="group.php?nombre_grupo=' . urlencode($nombre) . '">' . $nombre . '</a>';
+        echo '<a href="group.php?codigo=' . $grupo['codigo'] . '">' . $nombre . '</a>';
         echo '<br>';
     }
 
