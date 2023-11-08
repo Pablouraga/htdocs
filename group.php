@@ -20,12 +20,6 @@ while ($row = $getgroups->fetch(PDO::FETCH_ASSOC)) {
     echo "<br>";
 }
 
-// echo $codgrupo;
-
-// echo '<pre>';
-// print_r($getgroups->fetchAll(PDO::FETCH_ASSOC));
-// echo '</pre>';
-
 $getalbums = $connection->prepare("SELECT * FROM albumes where grupo = ?");
 $getalbums->bindParam(1, $codgrupo);
 $getalbums->execute();
@@ -44,6 +38,4 @@ while ($row = $getalbums->fetch(PDO::FETCH_ASSOC)) {
 }
 echo '</table>';
 
-// echo '<pre>';
-// print_r($getalbums->fetchAll(PDO::FETCH_ASSOC));
-// echo '</pre>';
+echo '<a href="/index">Volver</a>';
