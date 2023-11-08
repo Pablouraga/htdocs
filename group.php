@@ -35,7 +35,7 @@ $getalbums->execute();
 echo '<table><tr><td>Titulo</td><td>Año</td><td>Formato</td><td>Fecha de compra</td><td>Precio</td>';
 while ($row = $getalbums->fetch(PDO::FETCH_ASSOC)) {
     echo '<tr>';
-    echo '<td><a href="album.php?codigo=' . $row['codigo'] . '">' . $row['titulo'] . '</td>';
+    echo '<td><a href="/album/' . $row['codigo'] . '">' . $row['titulo'] . '</td>';
     echo '<td>' . $row['anyo'] . '</td>';
     echo '<td>' . $row['formato'] . '</td>';
     echo '<td>' . $row['fechacompra'] . '</td>';

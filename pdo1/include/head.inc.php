@@ -1,1 +1,0 @@
-<h1><a href="index.php">Discografia - Pablo Uraga</a></h1>

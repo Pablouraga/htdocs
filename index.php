@@ -24,7 +24,7 @@
 
     while ($grupo = $getgrupos->fetch()) {
         $nombre = $grupo['nombre'];
-        echo '<a href="group.php?codigo=' . $grupo['codigo'] . '">' . $nombre . '</a>';
+        echo '<a href="group/' . $grupo['codigo'] . '">' . $nombre . '</a>';
         echo '<br>';
     }
 
