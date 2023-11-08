@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
 <?php
 include_once(__DIR__ . '/include/head.inc.php');
 include_once(__DIR__ . '/include/connect.inc.php');
@@ -23,10 +31,11 @@ while ($row = $getgroups->fetch(PDO::FETCH_ASSOC)) {
 $getalbums = $connection->prepare("SELECT * FROM albumes where grupo = ?");
 $getalbums->bindParam(1, $codgrupo);
 $getalbums->execute();
-
+?>
 //título, año, formato, fecha de compra y precio
 
-echo '<table><tr><td>Titulo</td><td>Año</td><td>Formato</td><td>Fecha de compra</td><td>Precio</td>';
+<table><tr><td>Titulo</td><td>Año</td><td>Formato</td><td>Fecha de compra</td><td>Precio</td>
+<?php
 while ($row = $getalbums->fetch(PDO::FETCH_ASSOC)) {
     echo '<tr>';
     echo '<td><a href="/album/' . $row['codigo'] . '">' . $row['titulo'] . '</td>';
@@ -36,6 +45,10 @@ while ($row = $getalbums->fetch(PDO::FETCH_ASSOC)) {
     echo '<td>' . $row['precio'] . '</td>';
     echo '</tr>';
 }
-echo '</table>';
+?>
+</table>
 
-echo '<a href="/index">Volver</a>';
+<a href="/index">Volver</a>
+
+</body>
+</html>

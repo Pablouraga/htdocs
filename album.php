@@ -7,7 +7,6 @@ $dbpassword = '15151';
 $dboptions = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
 $connection = connect($dbname, $dbuser, $dbpassword, $dboptions);
 
-
 $getgrupo = $connection->prepare("SELECT g.nombre, g.codigo FROM grupos g, albumes a WHERE a.codigo = ? AND a.grupo = g.codigo");
 $getgrupo->bindParam(1, $_GET['codigo']);
 $getgrupo->execute();
