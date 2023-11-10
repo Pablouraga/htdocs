@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
     <?php
     include_once(__DIR__ . '/include/head.inc.php');
     include_once(__DIR__ . '/include/connect.inc.php');
@@ -20,23 +21,32 @@
     $connection = connect($dbname, $dbuser, $dbpassword, $dboptions);
 
     if (isset($_POST['submit'])) {
+        $doInsert = true;
 
         //comprobaciones de que los campos son validos, errores etc
-
-        if (strlen($_POST['nombre']) > 50) {
+        if (empty($_POST['nombre'])) {
+            $doInsert = false;
+            $errormsg['nombre'] = "El nombre no puede estar vacio";
+        } else if (strlen($_POST['nombre']) > 50) {
             $doInsert = false;
             $errormsg['nombre'] = "El nombre debe contener 50 caracteres como maximo";
         }
-        if (strlen($_POST['genero']) > 50) {
+        if (empty($_POST['genero'])) {
+            $doInsert = false;
+            $errormsg['genero'] = "El genero no puede estar vacio";
+        } else if (strlen($_POST['genero']) > 50) {
             $doInsert = false;
             $errormsg['genero'] = "El genero debe contener 50 caracteres como maximo";
         }
-        if (strlen($_POST['pais']) > 20) {
+        if (empty($_POST['pais'])) {
+            $doInsert = false;
+            $errormsg['pais'] = "El pais no puede estar vacio";
+        } else if (strlen($_POST['pais']) > 20) {
             $doInsert = false;
             $errormsg['pais'] = "El pais debe contener 20 caracteres como maximo";
         }
 
-        if (isset($doInsert) && $doInsert === true) {
+        if ($doInsert === true) {
             //Insertamos en la base de datos
             $sqlinsert = $connection->prepare("INSERT INTO grupos (nombre, genero, pais, inicio) VALUES (?, ?, ?, ?)");
             $sqlinsert->execute([$_POST['nombre'], $_POST['genero'], $_POST['pais'], $_POST['inicio']]);
@@ -55,7 +65,7 @@
     }
 
     ?>
-    <div id="newgroupform">
+    <div id="addnew group">
         <h3>Crear nuevo grupo</h3>
         <form action="#" method="post">
 
