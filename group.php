@@ -22,6 +22,8 @@
 
     if (isset($_POST['submit'])) {
         $doInsert = true;
+
+        //comprobaciones de que los campos son validos, errores etc
         if (empty($_POST['titulo'])) {
             $doInsert = false;
             $errormsg['titulo'] = "El titulo no puede estar vacio";
@@ -32,7 +34,8 @@
         if (empty($_POST['boughtdate'])) {
             $doInsert = false;
             $errormsg['boughtdate'] = "La fecha de compra no puede estar vacia";
-        }
+        } //comprobar que la fecha no es anterior al año de salida
+        //ni posterior a la fecha actual
         if (empty($_POST['price'])) {
             $errormsg['price'] = 'El precio es obligatorio.';
         } else if (!is_numeric($_POST['price'])) {
@@ -152,13 +155,13 @@
             <input type="number" name="price" id="price" value="<?= $_POST['price'] ?? '' ?>" placeholder="19.99" step="0.01"><br><br>
 
             <input type="hidden" name="group" value="<?= $_GET['codigo'] ?>">
-            <input type="submit" name="submit" value="Crear nuevo album"><br><br>
+            <input type="submit" name="submit" value="Crear nuevo album">
 
-        </form>
+        </form><br>
     </div>
 
 
-    <a href="/index">Volver</a>
+    <a href="/index">Volver a inicio</a>
 
 </body>
 
