@@ -1,0 +1,52 @@
+@charset "utf-8";
+/* CSS Document */
+body {
+    margin-top: 0;
+    background-color: rgb(0,97,172);
+}
+h1, h2, img {
+    margin: 2em 3%;
+    padding: 0;
+}
+section {
+    margin: 0 5%;
+}
+#cookies {
+    width: 60%;
+    margin: 0 auto;
+    padding: 1em;
+    border-radius: 0 0 1em 1em;
+    background-color: bisque;
+}
+#cookies div {
+    margin: .5em auto 0;
+    padding: .5em;
+    width: 5em;
+    text-align: center;
+    background-color: rgb(0,97,172);
+    border-radius: .5em;
+}
+#cookies div:hover {
+    background-color: cadetblue;
+}
+a {
+    display: inline-block;
+    width: 100%;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.styleButton {
+	margin: 0 auto;
+	padding: .5em;
+	width: 5em;
+	text-align: center;
+    color: black;
+	background-color: bisque;
+	border-radius: .5em;
+}
+.styleButton:hover {
+	background-color: cadetblue;
+	color: white;
+}

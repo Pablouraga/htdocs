@@ -1,4 +1,17 @@
-RewriteEngine On
-RewriteRule ^index$ index.php [L]
-RewriteRule ^group/([0-9]+)$ group.php?codigo=$1 [L]
-RewriteRule ^album/([0-9]+)$ album.php?codigo=$1 [L]
+#Para que no liste directorios sin index
+IndexIgnore *
+Options All -Indexes
+
+
+RewriteEngine on
+
+RewriteRule ^add/(.+)$ index.php?add=$1 [L]
+RewriteRule ^subtract/(.+)$ index.php?subtract=$1 [L]
+RewriteRule ^remove/(.+)$ index.php?remove=$1 [L]
+RewriteRule ^login/signup/(.+)$ login.php?signup=$1 [L]
+
+
+# Eliminar .php de las URL
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php

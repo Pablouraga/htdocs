@@ -1,0 +1,87 @@
+@charset "utf-8";
+/* CSS Document */
+body {
+	margin: 0 5%;	
+	font-family: sans-serif;
+}
+header {
+	margin-bottom: 1.5em;
+}
+
+h1, h2 {
+	padding: 0;
+}
+#carrito, section {
+	
+}
+#botones {
+	margin: .2em 0;
+}
+.boton {
+	margin: 0 auto;
+	padding: .5em;
+	width: 5em;
+	text-align: center;
+	background-color: bisque;
+	border-radius: .5em;
+}
+.boton:hover {
+	background-color: cadetblue;
+	color: white;
+}
+a, a:visited {
+	color: black;
+}
+a:hover {
+	text-decoration: none;
+}
+a.productos {
+	display: inline-block;
+	width: 100%;
+	font-weight: bold;
+	color: black;
+	text-decoration: none;
+}
+
+section.productos {
+	display: flex;
+	flex-wrap: wrap;
+}
+article {
+	width: 16%;
+	margin: 2%;
+	padding: .3em 0;
+	text-align: center;
+	background-color: antiquewhite;
+	border-radius: 1em;
+}
+article h2 {
+	margin: 0;
+	padding: 0;
+}
+article .imgProducto {
+	width: 85%;
+	height: auto;
+	padding: .3em;
+}
+.botonesCarrito {
+	display: block;
+	margin: .3em 0;
+}
+.botonesCarrito a {
+	width: 25%;
+}
+.botonesCarrito img:hover {
+	background-color: darkorange;
+	border-radius: .3em;
+}
+.botonesCarrito img {
+	width: 50%;
+}
+
+table {
+	border-collapse: collapse;
+}
+td {
+	border: 1px solid black;
+}

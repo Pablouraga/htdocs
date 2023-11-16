@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteRule ^index$ index.php [L]
+RewriteRule ^group/([0-9]+)$ group.php?codigo=$1 [L]
+RewriteRule ^album/([0-9]+)$ album.php?codigo=$1 [L]

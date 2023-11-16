@@ -1,114 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+/**
+ *	Script que implementa un carrito de la compra con variables de sesión
+ * 
+ *	@author Pablo Uraga
+ *  @version 1.0.0
+ */
+ini_set('session.name', 'sesion');
+ini_set('session.gc_maxlifetime', 10);
+session_start();
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-    <?php
-    include_once(__DIR__ . '/include/head.inc.php');
-    include_once(__DIR__ . '/include/connect.inc.php');
-    ?>
-</head>
+if(isset($_GET['add']) || isset($_GET['subtract']) || isset($_GET['remove'])) {
+	if(isset($_GET['add']) && $_GET['add']!='') {
+		if(!isset($_SESSION['basket'][$_GET['add']]))
+			$_SESSION['basket'][$_GET['add']] = 1;
+		else
+			$_SESSION['basket'][$_GET['add']] += 1;
+	}
+	if(isset($_GET['subtract']) && $_GET['subtract']!='' && isset($_SESSION['basket'][$_GET['subtract']])) {
+		$_SESSION['basket'][$_GET['subtract']] -= 1;
+		if($_SESSION['basket'][$_GET['subtract']]<=0)
+			unset($_SESSION['basket'][$_GET['subtract']]);
+	}
+	if(isset($_GET['remove']) && $_GET['remove']!='' && isset($_SESSION['basket'][$_GET['remove']])) {
+		unset($_SESSION['basket'][$_GET['remove']]);
+	}
 
-<body>
-    <?php
-    $dbname = 'mysql:host=localhost;dbname=discografia';
-    $dbuser = 'vetustamorla';
-    $dbpassword = '15151';
-    $dboptions = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
-    $connection = connect($dbname, $dbuser, $dbpassword, $dboptions);
+	//header('location: /');
+}
+?>
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>MerchaShop</title>
+		<link rel="stylesheet" href="/css/style.css">
+	</head>
 
-    if (isset($_POST['submit'])) {
-        $doInsert = true;
+	<body>
+		<?php
+			require_once('includes/header.inc.php');
+		?>
+		<div id="carrito">
+			<?php
+			if(!isset($_SESSION['basket']))
+				$products = 0;
+			else
+				$products = count($_SESSION['basket']);
+			echo $products;
+			echo ' producto';
+			if($products>1)
+				echo 's';
+			?>
+			en el carrito.
 
-        //comprobaciones de que los campos son validos, errores etc
-        if (empty($_POST['nombre'])) {
-            $doInsert = false;
-            $errormsg['nombre'] = "El nombre no puede estar vacio";
-        } else if (strlen($_POST['nombre']) > 50) {
-            $doInsert = false;
-            $errormsg['nombre'] = "El nombre debe contener 50 caracteres como maximo";
-        }
-        if (empty($_POST['genero'])) {
-            $doInsert = false;
-            $errormsg['genero'] = "El genero no puede estar vacio";
-        } else if (strlen($_POST['genero']) > 50) {
-            $doInsert = false;
-            $errormsg['genero'] = "El genero debe contener 50 caracteres como maximo";
-        }
-        if (empty($_POST['pais'])) {
-            $doInsert = false;
-            $errormsg['pais'] = "El pais no puede estar vacio";
-        } else if (strlen($_POST['pais']) > 20) {
-            $doInsert = false;
-            $errormsg['pais'] = "El pais debe contener 20 caracteres como maximo";
-        }
+			<a href="/basket" class="boton">Ver carrito</a>	
+		</div>
+		
+		<section class="productos">
+			<?php
+			require_once('includes/dbconnection.inc.php');
+			$connection = getDBConnection();
+			$products = $connection->query('SELECT * FROM products;', PDO::FETCH_OBJ);
+			
+			foreach($products as $product) {
+				echo '<article class="producto">';
+					echo '<h2>'. $product->name .'</h2>';
+					echo '<span>('. $product->category .')</span>';
+					echo '<img src="/img/products/'. $product->image .'" alt="'. $product->name .'" class="imgProducto"><br>';
+					echo '<span>'. $product->price .' €</span><br>';
+					echo '<span class="botonesCarrito">';
+						echo '<a href="/add/'.$product->id .'" class="productos"><img src="/img/mas.png" alt="añadir 1"></a>';
+						echo '<a href="/subtract/'.$product->id .'" class="productos"><img src="/img/menos.png" alt="quitar 1"></a>';
+						echo '<a href="/remove/'.$product->id .'" class="productos"><img src="/img/papelera.png" alt="quitar todos"></a>';
+					echo '</span>';
+					echo '<span>Stock: '. $product->stock .'</span>';
+				echo '</article>';
+			}
 
-        if ($doInsert === true) {
-            //Insertamos en la base de datos
-            $sqlinsert = $connection->prepare("INSERT INTO grupos (nombre, genero, pais, inicio) VALUES (?, ?, ?, ?)");
-            $sqlinsert->execute([$_POST['nombre'], $_POST['genero'], $_POST['pais'], $_POST['inicio']]);
-            unset($_POST);   
-        }
-
-    }
-
-
-    $getgrupos = $connection->query("SELECT nombre, codigo from grupos");
-
-    while ($grupo = $getgrupos->fetch()) {
-        $nombre = $grupo['nombre'];
-        echo '<a href="group/' . $grupo['codigo'] . '">' . $nombre . '</a>';
-        echo '<br>';
-    }
-
-    ?>
-    <div id="addnew group">
-        <h3>Crear nuevo grupo</h3>
-        <form action="#" method="post">
-
-            <!-- <label for="nombre">Nombre:</label><br> -->
-            <input type="text" name="nombre" id="nombre" value="<?= $_POST['nombre'] ?? '' ?>" placeholder="Nombre del grupo"><br>
-            <?php if (isset($errormsg['nombre'])) {
-                echo $errormsg['nombre'];
-            } ?><br>
-
-            <!-- <label for="genero">Genero:</label><br> -->
-            <input type="text" name="genero" id="genero" value="<?= $_POST['genero'] ?? '' ?>" placeholder="Genero"><br>
-            <?php if (isset($errormsg['genero'])) {
-                echo $errormsg['genero'];
-            } ?><br>
-
-            <!-- <label for="pais">País:</label><br> -->
-            <input type="text" name="pais" id="pais" value="<?= $_POST['pais'] ?? '' ?>" placeholder="Pais"><br>
-            <?php if (isset($errormsg['pais'])) {
-                echo $errormsg['pais'];
-            }
-            ?><br>
-
-            <label for="inicio">Año de inicio:</label>
-                <select name="inicio" id="inicio">
-                    <?php
-
-                    for ($i = 1990; $i <= 2023; $i++) {
-                        if ($_POST['inicio'] == $i) {
-                            echo '<option value="' . $i . '" selected>' . $i . '</option>';
-                        } else {
-                            echo '<option value="' . $i . '">' . $i . '</option>';
-                        }
-                    }
-                    ?>
-                </select><br>
-            <?php if (isset($errormsg['inicio'])) {
-                echo $errormsg['inicio'];
-            } ?><br>
-
-            <input type="submit" name="submit" value="Crear nuevo grupo">
-
-        </form>
-    </div>
-</body>
-
+			unset($products);
+			unset($connection);
+			?>			
+		</section>		
+	</body>
 </html>
