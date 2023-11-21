@@ -21,6 +21,7 @@ session_start();
     <?php
     require_once('includes/header.inc.php');
     require_once('includes/dbconnection.inc.php');
+    print_r($_POST);
     $connection = getDBConnection();
     if (isset($_POST['usernameOrEmail'])) {
         if ($_POST['usernameOrEmail'] != '' && $_POST['password'] != '') {
@@ -54,6 +55,9 @@ session_start();
 
         <label for="password">Contraseña:</label>
         <input type="password" name="password"><br>
+
+        <label for="checkbox">Recordarme durante 30 dias</label>
+        <input type="checkbox" name="autologin30d" id="autologin30d"><br>
 
         <input type="submit" value="Iniciar sesión">
     </form>
