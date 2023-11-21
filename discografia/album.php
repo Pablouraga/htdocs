@@ -14,14 +14,15 @@
 
 <body>
     <?php
+    /**
+     * @author Pablo Uraga
+     * @version 1.0.0
+     */
     $dbname = 'mysql:host=localhost;dbname=discografia';
     $dbuser = 'vetustamorla';
     $dbpassword = '15151';
     $dboptions = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
     $connection = connect($dbname, $dbuser, $dbpassword, $dboptions);
-
-    print_r($_POST);
-    print_r($_GET);
 
     if (isset($_POST['submit'])) {
         $doInsert = true;
@@ -34,15 +35,18 @@
             $doInsert = false;
             $errormsg['titulo'] = "El titulo no puede tener mas de 50 caracteres";
         }
-        if (!preg_match('^[0-9]{1,2}:[0-5]{1,2}$^', $_POST['duracion'])) {
+        if (!preg_match('/^[0-5]{1}[0-9]{1}:[0-5]{1}[0-9]{1}$/', $_POST['duracion'])) {
             $doInsert = false;
-            $errormsg['duracion'] = "La duración no es valida";
+            $errormsg['duracion'] = "La duración no es válida. Introduce el formato mm:ss.";
         }
+        $tiempo = explode(":", $_POST['duracion']);
+        $duracion = $tiempo[0] * 60 + $tiempo[1];
 
         if ($doInsert === true) {
-            $sqlinsert = $connection->prepare("INSERT INTO canciones (titulo, album, duracio, posicion) VALUES (?, ?, ?, ?)");
-            $sqlinsert->execute([$_POST['titulo']], $_GET['codigo'], $_POST['duracion'], $_POST['posicion']);
+            $sqlinsert = $connection->prepare("INSERT INTO canciones (titulo, album, duracion, posicion) VALUES (?, ?, ?, ?)");
+            $sqlinsert->execute([$_POST['titulo'], $_GET['codigo'], $duracion, $_POST['posicion']]);
         }
+
 
     }
 
@@ -88,10 +92,12 @@
 
         <h3>Crear nueva cancion</h3>
 
-        <form method="post" action="">
+        <form method="post" action="#">
+            <?= $errormsg['titulo'] ?? '' ?><br>
             <input type="text" name="titulo" id="titulo" placeholder="Titulo"><br><br>
 
-            <input type="number" name="duracion" id="duracion" placeholder="Duracion (minutos:segundos)"><br>
+            <?= $errormsg['duracion'] ?? '' ?><br>
+            <input type="text" name="duracion" id="duracion" placeholder="Duracion (minutos:segundos)"><br>
 
             <input type="hidden" name="album" value="<?php echo $_GET['codigo']; ?>"><br>
             <input type="hidden" name="posicion" value="<?= $posnuevacancion + 1 ?>">

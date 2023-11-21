@@ -14,6 +14,10 @@
 
 <body>
     <?php
+    /**
+     * @author Pablo Uraga
+     * @version 1.0.0
+     */
     $dbname = 'mysql:host=localhost;dbname=discografia';
     $dbuser = 'vetustamorla';
     $dbpassword = '15151';
