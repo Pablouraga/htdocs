@@ -36,7 +36,11 @@ session_start();
                     $_SESSION['rol'] = $getRol['rol'];
                     header('Location: /');
                     exit;
+                } else {
+                    $errorMsg = 'Credenciales invalidas';
                 }
+            } else {
+                $errorMsg = 'Credenciales invalidas';
             }
         } else {
             $errorMsg = 'Credenciales invalidas';

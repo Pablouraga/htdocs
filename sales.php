@@ -10,6 +10,7 @@
 
 <body>
     <?php
+    session_start();
     require_once('includes/header.inc.php');
     require_once('includes/dbconnection.inc.php');
     $connection = getDBConnection();

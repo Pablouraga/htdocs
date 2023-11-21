@@ -30,7 +30,7 @@ if (isset($_GET['add']) || isset($_GET['subtract']) || isset($_GET['remove'])) {
 		unset($_SESSION['basket'][$_GET['remove']]);
 	}
 
-	//header('location: /');
+	header('location: /');
 }
 
 ?>
@@ -91,67 +91,9 @@ if (isset($_GET['add']) || isset($_GET['subtract']) || isset($_GET['remove'])) {
 			?>
 		</section>
 	<?php } else {
-
-		if (isset($_POST['username'])) {
-			$connection = getDBConnection();
-			$users = $connection->prepare('SELECT COUNT(*) FROM users WHERE user=? OR email=?');
-			$users->execute([$_POST['username'], $_POST['email']]);
-			$users = $users->fetch(PDO::FETCH_ASSOC);
-			$canRegister = true;
-
-			//Si no hay ningun usuario con ese nombre y/o email
-			if ($users['COUNT(*)'] == 0) {
-				//Validacion username
-				if (empty($_POST['username'])) {
-					$errorMsg['username'] = 'El nombre de usuario no puede estar vacio';
-					$canRegister = false;
-				} else if (strlen($_POST['username']) > 20) {
-					$errorMsg['username'] = "El nombre no puede tener mas de 20 caracteres";
-					$canRegister = false;
-				}
-
-				//Validacion Email
-				if (empty($_POST['email'])) {
-					$errorMsg['email'] = 'La direccion de correo electronico no puede estar vacia';
-					$canRegister = false;
-				} else if (strlen($_POST['email']) > 80) {
-					$errorMsg['email'] = 'La direccion de correo electronico no puede tener mas de 80 caracteres';
-					$canRegister = false;
-				} else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-					$errorMsg['email'] = 'La direccion de correo electronico no es valida';
-					$canRegister = false;
-				}
-
-				//Validacion password
-				if (empty($_POST['password'])) {
-					$errorMsg['password'] = 'La contraseña no puede estar vacia';
-					$canRegister = false;
-				} else if (strlen($_POST['password']) > 255) {
-					$errorMsg['password'] = 'La contraseña no puede tener mas de 255 caracteres';
-					$canRegister = false;
-				} else if (strlen($_POST['password']) < 3) {
-					$errorMsg['password'] = 'La contraseña no puede tener menos de 3 caracteres';
-					$canRegister = false;
-				}
-			} else {
-				$errorMsg['global'] = 'Ya hay un usuario registrado con estas credenciales';
-				$canRegister = false;
-			}
-
-			if ($canRegister) {
-                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-                $insertNewUser = $connection->prepare("INSERT INTO users (user, email, password) VALUES (?, ?, ?)");
-                $insertNewUser->execute([$_POST['username'], $_POST['email'], $password]);
-                $_SESSION['username'] = $_POST['username'];
-				$_SESSION['rol'] = $_POST['rol'];
-                header('Location: /');
-				exit;
-			}
-		}
-
 	?>
 
-		<form action="#" method="post">
+		<form action="signup.php" method="post">
 			<?= $errorMsg['username'] ?? '' ?><br>
 			<label for="username">Nombre de usuario</label>
 			<input type="text" name="username"><br>
