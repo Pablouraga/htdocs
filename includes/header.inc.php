@@ -6,7 +6,7 @@
 
 if (isset($_SESSION['username'])) {
     echo 'Bienvenido, ' . $_SESSION['username'];
-    echo '<a href="logout.php">Cerrar sesion</a>';
+    echo '<br><a href="logout.php">Cerrar sesion</a>';
     if ($_SESSION['rol'] == 'admin') {
         echo '<a href="users.php">Users</a>';
     }
