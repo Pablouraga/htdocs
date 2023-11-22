@@ -19,7 +19,7 @@ if (!isset($_SESSION['username']) && isset($_COOKIE['token'])) {
 	$_SESSION['rol'] = $tokenExists['rol'];
 }
 
-if (isset($_SESSION['last_active']) && (time() - $_SESSION['last_active'] > 10)) {
+if (isset($_SESSION['last_active']) && (time() - $_SESSION['last_active'] > 600)) {
 	session_unset();
 	session_destroy();
 }
