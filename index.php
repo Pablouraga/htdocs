@@ -6,8 +6,20 @@
  *	@author Álex Torres
  */
 session_start();
+require_once('includes/dbconnection.inc.php');
+$connection = getDBConnection();
 
-if (isset($_SESSION['last_active']) && (time() - $_SESSION['last_active'] > 600)) {
+// NO existe variable sesion y EXISTE cookie con token
+if (!isset($_SESSION['username']) && isset($_COOKIE['token'])) {
+	$tokenExists = $connection->prepare('SELECT user, rol FROM users WHERE token = ?');
+	$tokenExists->execute([$_COOKIE['token']]);
+	$tokenExists = $tokenExists->fetch(PDO::FETCH_ASSOC);
+	// print_r($tokenExists);
+	$_SESSION['username'] = $tokenExists['user'];
+	$_SESSION['rol'] = $tokenExists['rol'];
+}
+
+if (isset($_SESSION['last_active']) && (time() - $_SESSION['last_active'] > 10)) {
 	session_unset();
 	session_destroy();
 }
@@ -47,7 +59,6 @@ if (isset($_GET['add']) || isset($_GET['subtract']) || isset($_GET['remove'])) {
 <body>
 	<?php
 	require_once('includes/header.inc.php');
-	require_once('includes/dbconnection.inc.php');
 	if (isset($_SESSION['username'])) {
 	?>
 		<div id="carrito">
@@ -68,8 +79,8 @@ if (isset($_GET['add']) || isset($_GET['subtract']) || isset($_GET['remove'])) {
 
 		<section class="productos">
 			<?php
-			$connection = getDBConnection();
 			$products = $connection->query('SELECT * FROM products;', PDO::FETCH_OBJ);
+			// print_r($_COOKIE);
 
 			foreach ($products as $product) {
 				echo '<article class="producto">';

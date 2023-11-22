@@ -23,6 +23,7 @@ session_start();
     require_once('includes/dbconnection.inc.php');
     print_r($_POST);
     $connection = getDBConnection();
+
     if (isset($_POST['usernameOrEmail'])) {
         if ($_POST['usernameOrEmail'] != '' && $_POST['password'] != '') {
             $getUsernamesAndEmails = $connection->prepare('SELECT password FROM users WHERE user = ? OR email = ?');
@@ -35,6 +36,12 @@ session_start();
                     $getRol = $getRol->fetch(PDO::FETCH_ASSOC);
                     $_SESSION['username'] = $_POST['usernameOrEmail'];
                     $_SESSION['rol'] = $getRol['rol'];
+                    if ($_POST['autologin30d'] == 'on') {
+                        $token = bin2hex(random_bytes(90));
+                        $insertToken = $connection->prepare('UPDATE users SET token = (?) WHERE user = ?');
+                        $insertToken->execute([$token, $_SESSION['username']]);
+                        setcookie('token', $token, time() + 60 * 60 * 24 * 30, '/');
+                    }
                     header('Location: /');
                     exit;
                 } else {
