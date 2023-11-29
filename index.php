@@ -1,55 +1,135 @@
 <?php
 
-// Ruta al archivo JSON
-$jsonFilePath = './data.json';
-$uuid = 'c4319a64486d4efb9803abde4cf40ffd';
+/**
+ *	Script que implementa un carrito de la compra con variables de sesión
+ * 
+ *	@author Álex Torres
+ */
+session_start();
+require_once('includes/dbconnection.inc.php');
+$connection = getDBConnection();
 
-// Leer el contenido del archivo JSON
-$jsonData = file_get_contents($jsonFilePath);
-
-// Decodificar el JSON en un array de PHP
-$dataArray = json_decode($jsonData, true);
-
-// Verificar si hubo algún error en la decodificación
-if (json_last_error() !== JSON_ERROR_NONE) {
-    echo 'Error al decodificar el JSON: ' . json_last_error_msg();
-} else {
-    // Trabajar con los datos como un array de PHP
-    $profiles = $dataArray['profiles'];
-
-    // Buscar el perfil con 'selected' establecido en 'true'
-    $selectedProfile = null;
-    foreach ($profiles as $profile) {
-        if ($profile['selected'] == 1) {
-            $selectedProfile = $profile;
-        }
-    }
-
-    //Uncommon 7, Rare 12, Epic 17, Leg 21
-    $levelCost = [0, 100, 210, 330, 460, 605, 765, 940, 1130, 1340, 1570, 1820, 2095, 2395, 2725, 3085, 3485, 3925, 4415, 4955, 5555, 6215, 6945, 7745, 8625, 9585, 10635, 11785, 13045, 14425, 15935, 17585, 19385, 21345, 23475, 25785, 28285, 30985, 33905, 37065, 40485, 44185, 48185, 52535, 57285, 62485, 68185, 74485, 81485, 89285, 97985, 107685, 118485, 130485, 143785, 158485, 174685, 192485, 211985, 233285, 256485, 281685, 309085, 338885, 371285, 406485, 444685, 486085, 530885, 579285, 631485, 687685, 748085, 812885, 882285, 956485, 1035685, 1120385, 1211085, 1308285, 1412485, 1524185, 1643885, 1772085, 1909285, 2055985, 2212685, 2380385, 2560085, 2752785, 2959485, 3181185, 3418885, 3673585, 3946285, 4237985, 4549685, 4883385, 5241085, 5624785, 6036485, 6478185, 6954885, 7471585, 8033285, 8644985, 9311685, 10038385, 10830085, 11691785, 12628485, 13645185, 14746885, 15938585, 17225285, 18611985, 20108685, 21725385, 23472085, 253587785];
-
-    $commonCost = array_slice($levelCost, 0, 100);
-    $uncommonCost = array_slice($levelCost, 6, 100);
-    $rareCost = array_slice($levelCost, 11, 100);
-    $epicCost = array_slice($levelCost, 16, 100);
-    $legendaryCost = array_slice($levelCost, 20, 100);
-
-    $player = $selectedProfile['members'][$uuid];
-    $pets = $player['pets_data']['pets'];
-
-    $cont = 1;
-    $xpSub91 = 0;
-    $xpOver91 = 0;
-    foreach ($legendaryCost as $key => $value) {
-        echo 'level ' . $cont++ . ' xp ' . $value . ' <br>';
-    }
-
-    // foreach ($pets as $pet) {
-    //     echo 'Name: ' . $pet['type'] . '. Rarity: ' . $pet['tier'] . '. Experience: ' . $pet['exp'] . '<br>';
-    // }
-
-    // echo '<pre>';
-    // print_r($pets);
-    // echo '</pre>';
-
+// NO existe variable sesion y EXISTE cookie con token
+if (!isset($_SESSION['username']) && isset($_COOKIE['token'])) {
+	$tokenExists = $connection->prepare('SELECT user, rol FROM users WHERE token = ?');
+	$tokenExists->execute([$_COOKIE['token']]);
+	$tokenExists = $tokenExists->fetch(PDO::FETCH_ASSOC);
+	// print_r($tokenExists);
+	$_SESSION['username'] = $tokenExists['user'];
+	$_SESSION['rol'] = $tokenExists['rol'];
 }
+
+if (isset($_SESSION['last_active']) && (time() - $_SESSION['last_active'] > 600)) {
+	session_unset();
+	session_destroy();
+}
+
+$_SESSION['last_active'] = time();
+
+if (isset($_GET['add']) || isset($_GET['subtract']) || isset($_GET['remove'])) {
+	if (isset($_GET['add']) && $_GET['add'] != '') {
+		if (!isset($_SESSION['basket'][$_GET['add']]))
+			$_SESSION['basket'][$_GET['add']] = 1;
+		else
+			$_SESSION['basket'][$_GET['add']] += 1;
+	}
+	if (isset($_GET['subtract']) && $_GET['subtract'] != '' && isset($_SESSION['basket'][$_GET['subtract']])) {
+		$_SESSION['basket'][$_GET['subtract']] -= 1;
+		if ($_SESSION['basket'][$_GET['subtract']] <= 0)
+			unset($_SESSION['basket'][$_GET['subtract']]);
+	}
+	if (isset($_GET['remove']) && $_GET['remove'] != '' && isset($_SESSION['basket'][$_GET['remove']])) {
+		unset($_SESSION['basket'][$_GET['remove']]);
+	}
+
+	header('location: /');
+}
+
+// if (isset($_COOKIE['lang'])) {
+	
+// }
+
+?>
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>MerchaShop</title>
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+	<?php
+	require_once('includes/header.inc.php');
+	if (isset($_SESSION['username'])) {
+	?>
+		<div id="carrito">
+			<?php
+			if (!isset($_SESSION['basket']))
+				$products = 0;
+			else
+				$products = count($_SESSION['basket']);
+			echo $products;
+			echo ' producto';
+			if ($products > 1)
+				echo 's';
+			?>
+			en el carrito.
+
+			<a href="/basket" class="boton">Ver carrito</a>
+		</div>
+
+		<section class="productos">
+			<?php
+			$products = $connection->query('SELECT * FROM products;', PDO::FETCH_OBJ);
+			// print_r($_COOKIE);
+
+			foreach ($products as $product) {
+				echo '<article class="producto">';
+				echo '<h2>' . $product->name . '</h2>';
+				echo '<span>(' . $product->category . ')</span>';
+				echo '<img src="/img/products/' . $product->image . '" alt="' . $product->name . '" class="imgProducto"><br>';
+				echo '<span>' . $product->price . ' €</span><br>';
+				echo '<span class="botonesCarrito">';
+				echo '<a href="/add/' . $product->id . '" class="productos"><img src="/img/mas.png" alt="añadir 1"></a>';
+				echo '<a href="/subtract/' . $product->id . '" class="productos"><img src="/img/menos.png" alt="quitar 1"></a>';
+				echo '<a href="/remove/' . $product->id . '" class="productos"><img src="/img/papelera.png" alt="quitar todos"></a>';
+				echo '</span>';
+				echo '<span>Stock: ' . $product->stock . '</span>';
+				echo '</article>';
+			}
+
+			unset($products);
+			unset($connection);
+			?>
+		</section>
+	<?php } else {
+	?>
+
+		<form action="signup.php" method="post">
+			<?= $errorMsg['username'] ?? '' ?><br>
+			<label for="username">Nombre de usuario</label>
+			<input type="text" name="username"><br>
+
+			<?= $errorMsg['email'] ?? '' ?><br>
+			<label for="email">Correo electronico</label>
+			<input type="text" name="email"><br>
+
+			<?= $errorMsg['password'] ?? '' ?><br>
+			<label for="password">Contraseña</label>
+			<input type="password" name="password"><br>
+
+			<?= $errorMsg['global'] ?? '' ?> <br>
+			<input type="hidden" name="rol" value="customer">
+			<input type="submit" value="Registrarse">
+		</form>
+
+		<p>¿Ya tienes una cuenta? <a href="login.php">Inicia sesión</a></p>
+
+		<a href="sales.php"><img src="/img/price-tag.png" width="48px" alt="Ofertas"></a>
+	<?php } ?>
+</body>
+
+</html>
