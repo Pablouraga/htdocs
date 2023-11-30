@@ -40,4 +40,6 @@ if (isset($_SESSION['username'])) {
         echo ' <a href="users.php">' . $message['users'] . '</a>';
     }
 }
-?>
+// $current = substr($_SERVER['PHP_SELF'], 1, -4);
+
+// require_once("'" . $current . '.' . $langFile . '.inc.php');
