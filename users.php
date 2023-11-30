@@ -25,7 +25,7 @@
     $users = $getUsers->fetchAll(PDO::FETCH_ASSOC);
 
     echo '<br><br><table>';
-    echo '<tr><th>Nombre de usuario</th><th>Email</th><th>Rol</th></tr>';
+    echo '<tr><th>'.$message['backendUsername'].'</th><th>'.$message['backendEmail'].'</th><th>'.$message['backendRole'].'</th></tr>';
     foreach ($users as $user) {
         if ($user['user'] != $_SESSION['username']) {
             echo '<tr>';

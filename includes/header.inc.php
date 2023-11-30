@@ -1,27 +1,43 @@
+<?php
+if (isset($_GET['lang'])) {
+    $_SESSION['lang'] = $_GET['lang'];
+    setcookie('lang', $_GET['lang'], time() + 60);
+    header('Location: ' . $_SERVER['PHP_SELF']);
+    exit;
+} elseif (isset($_COOKIE['lang'])) {
+    $_SESSION['lang'] = $_COOKIE['lang'];
+}
+
+$langs = ['es', 'en', 'ca'];
+if (isset($_GET['lang']) && !in_array($_GET['lang'], $langs)) {
+    header('Location: /');
+    exit;
+}
+?>
+
 <header>
     <h1><a href="/index">MerchaShop</a></h1>
-    <a href="?lang=es"><img src="../img/spain.png" alt="Spanish"></a>
-    <a href="?lang=en"><img src="../img/united-kingdom.png" alt="English"></a>
-    <a href="?lang=ca"><img src="../img/catalonia.png" alt="catalonia" height="32px"></a>
     <br><a href="/index">Principal</a>
 </header>
+
 <?php
-
-if (isset($_GET['lang'])) {
-    setcookie('lang', $_GET['lang'], time()+60);
+$defaultLang = 'es';
+foreach ($langs as $language) {
+    if ((!isset($_COOKIE['lang']) && $defaultLang != $language) || (isset($_COOKIE['lang']) && $_COOKIE['lang'] != $language)) {
+        echo '<a href="?lang=' . $language . '">';
+    }
+    echo '<img src="../img/' . $language . '.png" alt="' . $language . '" height="32px"></a>';
 }
+echo '<br>';
 
-//Cargar idioma por defecto y el seleccionado en la cookie
-require_once('./includes/lang/en.inc.php');
-if (isset($_COOKIE['lang'])) {
-    require_once('./includes/lang/'. $_COOKIE['lang'] .'.inc.php');
-}
+$langFile = isset($_SESSION['lang']) ? $_SESSION['lang'] : 'es';
+require_once("./includes/lang/$langFile.inc.php");
 
 if (isset($_SESSION['username'])) {
-    // echo 'Bienvenido, ' . $_SESSION['username'];
     printf($message['welcome'], $_SESSION['username']);
-    echo '<br><a href="logout.php">Cerrar sesion</a>';
+    echo '<br><a href="logout.php">' . $message['logout'] . '</a>';
     if ($_SESSION['rol'] == 'admin') {
-        echo ' <a href="users.php">Users</a>';
+        echo ' <a href="users.php">' . $message['users'] . '</a>';
     }
 }
+?>

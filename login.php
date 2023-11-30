@@ -1,19 +1,19 @@
 <?php
 
 /**
- *	Script que implementa un carrito de la compra con variables de sesión
+ * Script that implements a shopping cart with session variables
  * 
- *	@author Álex Torres
+ * @author Álex Torres
  */
 session_start();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Iniciar sesión</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
@@ -21,7 +21,6 @@ session_start();
     <?php
     require_once('includes/header.inc.php');
     require_once('includes/dbconnection.inc.php');
-    print_r($_POST);
     $connection = getDBConnection();
 
     if (isset($_POST['usernameOrEmail'])) {
@@ -45,25 +44,25 @@ session_start();
                     header('Location: /');
                     exit;
                 } else {
-                    $errorMsg = 'Credenciales invalidas';
+                    $errorMsg = 'Credenciales inválidas';
                 }
             } else {
-                $errorMsg = 'Credenciales invalidas';
+                $errorMsg = 'Credenciales inválidas';
             }
         } else {
-            $errorMsg = 'Credenciales invalidas';
+            $errorMsg = 'Credenciales inválidas';
         }
     }
     ?>
     <form action="login.php" method="post">
         <?= $errorMsg ?? '' ?><br>
-        <label for="usernameOrEmail">Usuario o Email:</label>
+        <label for="usernameOrEmail"><?= $message['usernameOrEmail'] ?></label>
         <input type="text" name="usernameOrEmail"><br>
 
-        <label for="password">Contraseña:</label>
+        <label for="password"><?= $message['password'] ?></label>
         <input type="password" name="password"><br>
 
-        <label for="checkbox">Recordarme durante 30 dias</label>
+        <label for="checkbox"><?= $message['remember30d'] ?></label>
         <input type="checkbox" name="autologin30d" id="autologin30d"><br>
 
         <input type="submit" value="Iniciar sesión">

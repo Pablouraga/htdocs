@@ -43,11 +43,8 @@ if (isset($_GET['add']) || isset($_GET['subtract']) || isset($_GET['remove'])) {
 	}
 
 	header('location: /');
+	exit;
 }
-
-// if (isset($_COOKIE['lang'])) {
-	
-// }
 
 ?>
 <!doctype html>
@@ -71,14 +68,21 @@ if (isset($_GET['add']) || isset($_GET['subtract']) || isset($_GET['remove'])) {
 				$products = 0;
 			else
 				$products = count($_SESSION['basket']);
-			echo $products;
-			echo ' producto';
-			if ($products > 1)
-				echo 's';
-			?>
-			en el carrito.
 
-			<a href="/basket" class="boton">Ver carrito</a>
+			$langFile = isset($_SESSION['lang']) ? $_SESSION['lang'] : 'es';
+			require_once("./includes/lang/$langFile.inc.php");
+
+			echo $products;
+			echo ' ';
+			echo $message['products_in_cart'];
+
+			if ($products > 1)
+				echo ' ' . $message['products_in_cart_plural'];
+
+			echo ' ' . $message['in_the_cart'];
+			?>
+
+			<a href="/basket" class="boton"><?php echo $message['view_cart']; ?></a>
 		</div>
 
 		<section class="productos">
@@ -110,25 +114,26 @@ if (isset($_GET['add']) || isset($_GET['subtract']) || isset($_GET['remove'])) {
 
 		<form action="signup.php" method="post">
 			<?= $errorMsg['username'] ?? '' ?><br>
-			<label for="username">Nombre de usuario</label>
+			<label for="username"><?= $message['username'] ?></label>
 			<input type="text" name="username"><br>
 
 			<?= $errorMsg['email'] ?? '' ?><br>
-			<label for="email">Correo electronico</label>
+			<label for="email"><?= $message['email'] ?></label>
 			<input type="text" name="email"><br>
 
 			<?= $errorMsg['password'] ?? '' ?><br>
-			<label for="password">Contraseña</label>
+			<label for="password"><?= $message['password'] ?></label>
 			<input type="password" name="password"><br>
 
 			<?= $errorMsg['global'] ?? '' ?> <br>
 			<input type="hidden" name="rol" value="customer">
-			<input type="submit" value="Registrarse">
+			<input type="submit" value="<?= $message['register'] ?>">
 		</form>
 
-		<p>¿Ya tienes una cuenta? <a href="login.php">Inicia sesión</a></p>
+		<p><?= $message['have_account'] ?> <a href="login.php"><?= $message['login'] ?></a></p>
 
-		<a href="sales.php"><img src="/img/price-tag.png" width="48px" alt="Ofertas"></a>
+		<a href="sales.php"><img src="/img/price-tag.png" width="48px" alt="<?= $message['offers'] ?>"></a>
+
 	<?php } ?>
 </body>
 
