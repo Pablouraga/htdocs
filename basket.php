@@ -48,15 +48,24 @@ $_SESSION['last_active'] = time();
 				echo '<tr>';
 				echo '<td>' . $product->name . '</td>';
 				echo '<td>' . $quantity . '</td>';
-				printf('<td>%4.2f ' . $message['currencySymbol'] . '/' . $message['unit'] . '</td>', $product->price * $message['conversionRatio']);
-				printf('<td>%4.2f ' . $message['currencySymbol'], $product->price * $message['conversionRatio']);
+				if ($_COOKIE['lang'] == 'en') {
+					printf('<td>' . $message['currencySymbol'] . '%4.2f ' . '/' . $message['unit'] . '</td>', $product->price * $message['conversionRatio']);
+					printf('<td>' . $message['currencySymbol'] . '%4.2f ', $product->price * $message['conversionRatio']);
+				} else {
+					printf('<td>%4.2f ' . $message['currencySymbol'] . '/' . $message['unit'] . '</td>', $product->price * $message['conversionRatio']);
+					printf('<td>%4.2f ' . $message['currencySymbol'], $product->price * $message['conversionRatio']);
+				}
 
 				$basketTotal += $product->price * $quantity;
 
 				echo '</tr>';
 			}
 
-			printf('<tr><td></td><td></td><td>' . $message['total'] . '</td><td>%4.2f ' . $message['currencySymbol'] . '</td></tr>', $basketTotal * $message['conversionRatio']);
+			if ($_COOKIE['lang'] == 'en') {
+				printf('<tr><td></td><td></td><td>' . $message['total'] . '</td><td>'.$message['currencySymbol'].'%4.2f</td></tr>', $basketTotal * $message['conversionRatio']);
+			} else {
+				printf('<tr><td></td><td></td><td>' . $message['total'] . '</td><td>%4.2f ' . $message['currencySymbol'] . '</td></tr>', $basketTotal * $message['conversionRatio']);
+			}
 			echo '</table>';
 
 			unset($product);
