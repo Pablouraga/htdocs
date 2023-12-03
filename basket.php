@@ -48,6 +48,8 @@ $_SESSION['last_active'] = time();
 				echo '<tr>';
 				echo '<td>' . $product->name . '</td>';
 				echo '<td>' . $quantity . '</td>';
+
+				//Si la cookie lang tiene determinado que el lenguaje es ingles, la informacion dentro de la tabla estará alterada [libra esterlina][Cantidad]
 				if ($_COOKIE['lang'] == 'en') {
 					printf('<td>' . $message['currencySymbol'] . '%4.2f ' . '/' . $message['unit'] . '</td>', $product->price * $message['conversionRatio']);
 					printf('<td>' . $message['currencySymbol'] . '%4.2f ', $product->price * $message['conversionRatio']);
@@ -60,9 +62,10 @@ $_SESSION['last_active'] = time();
 
 				echo '</tr>';
 			}
-
+			
+			//Si la cookie lang tiene determinado que el lenguaje es ingles, la informacion dentro de la tabla estará alterada [libra esterlina][Cantidad]
 			if ($_COOKIE['lang'] == 'en') {
-				printf('<tr><td></td><td></td><td>' . $message['total'] . '</td><td>'.$message['currencySymbol'].'%4.2f</td></tr>', $basketTotal * $message['conversionRatio']);
+				printf('<tr><td></td><td></td><td>' . $message['total'] . '</td><td>' . $message['currencySymbol'] . '%4.2f</td></tr>', $basketTotal * $message['conversionRatio']);
 			} else {
 				printf('<tr><td></td><td></td><td>' . $message['total'] . '</td><td>%4.2f ' . $message['currencySymbol'] . '</td></tr>', $basketTotal * $message['conversionRatio']);
 			}
