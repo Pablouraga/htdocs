@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteRule ^api/pokemon/([0-9]+)/?$ /?api&pokemon&id=$1 [L]
+RewriteRule ^api/type/([0-9]+)/?$ /?api&type&id=$1 [L]
+RewriteRule ^api/pokemon/?$ /?api&pokemon [L]
+RewriteRule ^api/type/?$ /?api&type [L]
