@@ -1,64 +1,51 @@
-<?php
+<!DOCTYPE html>
+<html lang="en">
 
-// Ruta al archivo JSON
-$jsonFilePath = './data.json';
-$uuid = 'c4319a64486d4efb9803abde4cf40ffd';
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 3 - API RESTful Rick & Morty</title>
+    <?php
+    require_once(__DIR__ . '/include/header.inc.php');
+    $endpoint = 'https://rickandmortyapi.com/api';
+    ?>
+</head>
 
-// Leer el contenido del archivo JSON
-$jsonData = file_get_contents($jsonFilePath);
+<body>
+    <?php
+    $endpoint = 'https://rickandmortyapi.com/api';
 
-// Decodificar el JSON en un array de PHP
-$data = json_decode($jsonData, true);
-
-// Verificar si hubo algún error en la decodificación
-if (json_last_error() !== JSON_ERROR_NONE) {
-    echo 'Error al decodificar el JSON: ' . json_last_error_msg();
-} else {
-    // Trabajar con los datos como un array de PHP
-    $profiles = $data['profiles'];
-
-    // Buscar el perfil con 'selected' establecido en 'true'
-    $selectedProfile = null;
-    foreach ($profiles as $profile) {
-        if ($profile['selected'] == 1) {
-            $selectedProfile = $profile;
-        }
-    }
-    //$selectedProfile>members>uuid>dungeons>treasures>chests
-
-    $runs = $selectedProfile['members'][$uuid]['dungeons']['treasures']['runs'];
-    $chests = $selectedProfile['members'][$uuid]['dungeons']['treasures']['chests'];
-    $runsOverview = [];
-
-    foreach ($runs as $run) {
-        $runData = [
-            "run_id" => $run["run_id"],
-            "dungeon_type" => $run["dungeon_type"],
-            "dungeon_tier" => $run["dungeon_tier"],
-            "participants" => [],
-            "chests" => []
-        ];
-
-        foreach ($run["participants"] as $participant) {
-            $runData["participants"][] = $participant["display_name"];
-        }
-
-        foreach ($chests as $chest) {
-            if ($chest["run_id"] == $run["run_id"]) {
-                $runData["chests"][] = [
-                    "treasure_type" => $chest["treasure_type"],
-                    "rewards" => $chest["rewards"]
-                ];
-            }
-        }
-
-        $runsOverview[] = $runData;
+    if (isset($_GET['char'])) {
+        $_POST = []; // Limpia $_POST si existe
+        $endpoint .= '/character/?name=' . $_GET['char'];
     }
 
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode($runsOverview);
+    if (isset($_POST['characterSearch'])) {
+        $_GET = []; // Limpia $_GET si existe
+        $endpoint .= '/character/?name=' . $_POST['characterSearch'];
+    }
 
-    // echo '<pre>';
-    // print_r($runsOverview);
-    // echo '</pre>';
-}
+    if (!empty($_GET) || !empty($_POST)) {
+        $data = file_get_contents($endpoint);
+        $data = json_decode($data, true);
+
+        $next = $data['info']['next'];
+        $result = $data['results'];
+
+        while ($next != null) {
+            $data = json_decode(file_get_contents($next), true);
+            $next = $data['info']['next'];
+            $result = array_merge($result, $data['results']);
+        }
+
+        foreach ($result as $character) {
+            echo '<div class="char"><a href="character.php?id=' . $character['id'] . '">' . $character['name'] . '</a><br><img src="' . $character['image'] . '" alt="' . $character['name'] . '"></div>';
+        }
+
+        $_GET = [];
+        $_POST = [];
+    }
+    ?>
+</body>
+
+</html>
